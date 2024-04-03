@@ -63,7 +63,6 @@ jobs:
         id: tfplan
         run: |
           ACTION=$(if [[ "${{ inputs.mode }}" == "destroy" ]]; then echo "plan-destroy"; else echo "plan"; fi)
-          echo $ACTION
           bin/terraform.sh --action "${ACTION}" \
             --project ${{ vars.PROJECT }} \
             --region ${{ vars.REGION }} \
