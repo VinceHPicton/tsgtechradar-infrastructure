@@ -89,7 +89,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Apply Terraform
-        if: ${{ inputs.mode == "apply" || "destroy" }}
+        if: ${{ inputs.mode == "apply" }} || ${{ inputs.mode == "destroy" }}
         run: |
           bin/terraform.sh --action ${{ inputs.mode }} \
             --project ${{ vars.PROJECT }} \
