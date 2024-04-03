@@ -1,5 +1,5 @@
 name: Deploy Terraform Component
-run-name: Running Terraform ${{ inputs.doapply && 'apply' || 'plan' }} on Component ${{ inputs.component }} to Environment ${{ inputs.environment }}
+run-name: Running Terraform ${{ inputs.mode }} on Component ${{ inputs.component }} to Environment ${{ inputs.environment }}
 
 concurrency:
   group: ${{ inputs.component }}-${{ inputs.environment }}
@@ -20,11 +20,15 @@ on:
         default: acedev
         options:
           - acedev
-      doapply:
-        description: Check to enable Apply
-        type: boolean
+      mode:
+        description: Mode to run terraform in
+        type: choice
         required: true
-        default: false
+        default: plan
+        options:
+          - plan
+          - apply
+          - destroy
 
 permissions:
   id-token: write
@@ -51,10 +55,18 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-west-2
-          role-to-assume: arn:aws:iam::302653724645:role/DeploymentExecution
+          role-to-assume: arn:aws:iam::${{ vars.ACCOUNT_ID }}:role/DeploymentExecution
           role-session-name: DeploymentExecution
           role-duration-seconds: 3600
 
-      - name: Check creds
-        run: aws s3 ls
+      - name: Terraform Plan
+        id: tfplan
+        run: |
+          bin/terraform.sh --action ${{ inputs.mode }} \
+            --project ${{ vars.PROJECT }} \
+            --region ${{ vars.REGION }} \
+            --component ${{ inputs.component }} \
+            --environment ${{ vars.ENVIRONMENT }} \
+            --group ${{ vars.GROUP }} \
+            --build-id ${{ github.run_id }}
 
