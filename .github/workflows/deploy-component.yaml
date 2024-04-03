@@ -69,4 +69,3 @@ jobs:
             --environment ${{ vars.ENVIRONMENT }} \
             --group ${{ vars.GROUP }} \
             --build-id ${{ github.run_id }}
-

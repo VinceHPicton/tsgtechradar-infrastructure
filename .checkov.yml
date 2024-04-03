@@ -15,3 +15,5 @@ quiet: true
 soft-fail: false
 compact: true
 skip-check:
+  # Want to use inputs on GitHub Actions
+  - CKV_GHA_7
