@@ -91,10 +91,10 @@ jobs:
       - name: Apply Terraform
         if: ${{ inputs.mode == 'apply' || inputs.mode == 'destroy' }}
         run: |
+          FLAG=$(if [[ "${{ inputs.mode }}" == "apply" ]]; then echo "--build-id ${{ github.run_id }}"; fi)
           bin/terraform.sh --action ${{ inputs.mode }} \
             --project ${{ vars.PROJECT }} \
             --region ${{ vars.REGION }} \
             --component ${{ inputs.component }} \
             --environment ${{ vars.ENVIRONMENT }} \
-            --group ${{ vars.GROUP }} \
-            --build-id ${{ github.run_id }}
+            --group ${{ vars.GROUP }} "${FLAG}"
