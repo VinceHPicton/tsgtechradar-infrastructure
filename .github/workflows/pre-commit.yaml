@@ -1,0 +1,63 @@
+name: Pre-commit checks
+
+on:
+  pull_request:
+
+  push:
+
+  workflow_dispatch:
+
+env:
+  terraform_version: 1.7.4
+  tflint_version: v0.50.2
+  python_version: 3.11
+
+concurrency:
+  group: lint-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  pre-commit-checks:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.terraform_version }}
+          terraform_wrapper: false
+
+      - name: Cache TFLint plugin dir
+        uses: actions/cache@v4
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - name: Setup TFlint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: ${{ env.tflint_version }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.python_version }}
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
+  checkov:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          output_format: cli
+          output_file_path: console

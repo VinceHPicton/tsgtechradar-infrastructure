@@ -1,0 +1,17 @@
+block-list-secret-scan: []
+download-external-modules: true
+evaluate-variables: true
+framework:
+  - all
+mask: []
+output:
+  - cli
+  - sarif
+  - github_failed_only
+enable-secret-scan-all-files: true
+secrets-scan-file-type: []
+summary-position: top
+quiet: true
+soft-fail: false
+compact: true
+skip-check:

@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - github-actions
+      - increment-no-release
+
+  # Maintain dependencies for individual Terraform modules
+  - package-ecosystem: terraform
+    directory: modules/s3-bucket
+    schedule:
+      interval: weekly
