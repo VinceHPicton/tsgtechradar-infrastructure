@@ -39,7 +39,7 @@ variable "environment" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "demo"
+  default     = "template"
 }
 
 variable "default_tags" {
