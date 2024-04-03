@@ -32,10 +32,6 @@ variable "environment" {
 # tfscaffold variables specific to this component
 ##
 
-# This is the only primary variable to have its value defined as
-# a default within its declaration in this file, because the variables
-# purpose is as an identifier unique to this component, rather
-# then to the environment from where all other variables come.
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
@@ -50,7 +46,7 @@ variable "default_tags" {
 
 variable "deployment_execution_role_name" {
   type        = string
-  description = "The role name for terraform to assume to perform all deployment actions in a given account. This is determined by the Halo Landing Zone and should not normally be changed."
+  description = "The role name for terraform to assume to perform all deployment actions in a given account. This is determined by the Landing Zone and should not normally be changed."
   default     = "DeploymentExecution"
 }
 
