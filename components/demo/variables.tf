@@ -39,7 +39,7 @@ variable "environment" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "core"
+  default     = "demo"
 }
 
 variable "default_tags" {
@@ -52,4 +52,10 @@ variable "deployment_execution_role_name" {
   type        = string
   description = "The role name for terraform to assume to perform all deployment actions in a given account. This is determined by the Halo Landing Zone and should not normally be changed."
   default     = "DeploymentExecution"
+}
+
+variable "deployment_execution_external_id" {
+  type        = string
+  description = "External Id to use when assuming AWS role for deployment"
+  default     = ""
 }

@@ -12,7 +12,7 @@ on:
         type: choice
         required: true
         options:
-          - rds
+          - demo
       environment:
         description: Environment to deploy into
         type: choice
