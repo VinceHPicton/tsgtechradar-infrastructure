@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
 
+# External modules
+.external_modules
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
@@ -28,3 +31,6 @@ terraform.rc
 
 # Ignore test scripts
 test.sh
+
+# Ignore checkov results
+results.sarif

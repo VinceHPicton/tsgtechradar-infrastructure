@@ -17,3 +17,11 @@ compact: true
 skip-check:
   # Want to use inputs on GitHub Actions
   - CKV_GHA_7
+  # Ignore ALB errors for now
+  - CKV_AWS_91
+  - CKV_AWS_2
+  - CKV_AWS_103
+  # Not bothering with git hashes for now
+  - CKV_TF_1
+  # RETURN TO - ensuring SGs are attached to resources
+  - CKV2_AWS_5

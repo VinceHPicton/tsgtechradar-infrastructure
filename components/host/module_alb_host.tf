@@ -2,7 +2,7 @@ module "alb_host" {
   source  = "terraform-aws-modules/alb/aws"
   version = "9.4.0"
 
-  enable_deletion_protection = false
+  enable_deletion_protection = true
 
   name    = "${local.csi}-host"
   vpc_id  = data.aws_vpc.selected.id
