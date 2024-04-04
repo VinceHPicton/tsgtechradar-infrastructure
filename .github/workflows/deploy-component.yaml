@@ -98,4 +98,5 @@ jobs:
             --region ${{ vars.REGION }} \
             --component ${{ inputs.component }} \
             --environment ${{ vars.ENVIRONMENT }} \
-            --group ${{ vars.GROUP }} "${FLAG}"
+            --group ${{ vars.GROUP }} \
+            "${FLAG}"
