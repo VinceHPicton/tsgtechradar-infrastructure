@@ -1,4 +1,4 @@
-# module "asg_web" {
+# module "asg_host" {
 #   source  = "terraform-aws-modules/autoscaling/aws"
 #   version = "7.3.1"
 
@@ -34,7 +34,7 @@
 #   instance_type     = "t3.medium"
 #   key_name          = aws_key_pair.steve_mead_at_bjss_com.key_name
 #   user_data         = base64encode(data.cloudinit_config.web.rendered)
-#   security_groups   = [module.sg_web.security_group_id]
+#   security_groups   = [module.sg_host.security_group_id]
 #   ebs_optimized     = true
 #   enable_monitoring = true
 
@@ -49,7 +49,7 @@
 
 #   # Autoscaling group traffic source attachment
 #   create_traffic_source_attachment = true
-#   traffic_source_identifier        = module.alb_web.target_groups["asg_web"].arn
+#   traffic_source_identifier        = module.alb_host.target_groups["asg_host"].arn
 #   traffic_source_type              = "elbv2"
 
 #   # Autoscaling group schedule
@@ -57,8 +57,8 @@
 
 #   # IAM Role / Instance Profile
 #   create_iam_instance_profile = true
-#   iam_instance_profile_name   = "${local.csi}-web"
-#   iam_role_name               = "${local.csi}-web"
+#   iam_instance_profile_name   = "${local.csi}-host"
+#   iam_role_name               = "${local.csi}-host"
 #   iam_role_path               = "/ec2/"
 #   iam_role_description        = "TSG Technology Radar Web ASG"
 #   iam_role_tags = {
@@ -72,7 +72,7 @@
 #   tags = merge(
 #     local.default_tags,
 #     {
-#       "Name"            = "${local.csi}-web"
+#       "Name"            = "${local.csi}-host"
 #       "AppZipVersionId" = "${data.aws_s3_object.app_zip.version_id}"
 #     },
 #   )

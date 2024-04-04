@@ -1,19 +1,4 @@
-data "aws_vpc" "selected" {
-  id = var.vpc_id
-}
-
-data "aws_subnets" "public" {
-  filter {
-    name   = "vpc-id"
-    values = [var.vpc_id]
-  }
-
-  tags = {
-    Type = "public"
-  }
-}
-
-module "alb_web" {
+module "alb_host" {
   source  = "terraform-aws-modules/alb/aws"
   version = "9.4.0"
 
@@ -96,7 +81,7 @@ module "alb_web" {
       load_balancing_cross_zone_enabled = true
 
       # There's nothing to attach here in this definition.
-      # The attachment happens in the asg_web module
+      # The attachment happens in the asg_host module
       create_attachment = false
     }
   }
