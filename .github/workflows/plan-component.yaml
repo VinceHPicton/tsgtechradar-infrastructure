@@ -4,12 +4,18 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "**.tf"
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   get_changed_components:
     runs-on: ubuntu-22.04
     outputs:
-      matrix: ${{ steps.to-array.outputs.array }}
+      matrix: ${{ steps.changed-files.outputs.all_changed_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,11 +25,68 @@ jobs:
       - name: Get all components that have changed
         id: changed-files
         uses: tj-actions/changed-files@v44
+        with:
+          dir_names: true
+          path: components
+          matrix: true
 
       - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: echo ${{ steps.changed-files.outputs.all_changed_files }}
+
+  terraform_plan:
+    name: Terraform plan
+    runs-on: ubuntu-22.04
+    environment: acedev # use this as a default
+    needs: [get_changed_components]
+    strategy:
+      matrix:
+        module: ${{ fromJSON(needs.get_changed_components.outputs.matrix) }}
+      max-parallel: 4
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3.0.0
+        with:
+          terraform_wrapper: false
+          terraform_version: 1.7.4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{ vars.ACCOUNT_ID }}:role/DeploymentExecution
+          role-session-name: DeploymentExecution
+          role-duration-seconds: 3600
+
+      - name: Terraform Plan
+        id: tfplan
         run: |
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-          done
+          bin/terraform.sh --action plan \
+            --project ${{ vars.PROJECT }} \
+            --region ${{ vars.REGION }} \
+            --component ${{ matrix.module }} \
+            --environment ${{ vars.ENVIRONMENT }} \
+            --group ${{ vars.GROUP }} \
+            --build-id ${{ github.run_id }}
+
+      - name: Generate TF Plan View
+        id: tfplan-view
+        run: |
+          cd "components/${{ matrix.module }}"
+          component=${{ matrix.module }}
+          read component_name <<< "${component##*/}"
+          if [ -f "build/${component_name}_${{ github.run_id }}.tfplan" ]; then
+            echo "Getting plan for ${component_name}_${{ github.run_id }}.tfplan"
+          else
+            echo "ERROR: Build file not found"
+            exit 1
+          fi
+          echo "### Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          terraform show -no-color "build/${component_name}_${{ github.run_id }}.tfplan" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
