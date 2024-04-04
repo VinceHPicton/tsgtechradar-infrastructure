@@ -1,5 +1,5 @@
 module "sg_host" {
-  for_each = var.hosts
+  for_each = tomap(var.hosts)
   source   = "terraform-aws-modules/security-group/aws"
   version  = "~> 5.0"
 

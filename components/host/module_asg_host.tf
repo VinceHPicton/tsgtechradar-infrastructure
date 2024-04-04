@@ -1,5 +1,5 @@
 module "asg_host" {
-  for_each = var.hosts
+  for_each = tomap(var.hosts)
   source   = "terraform-aws-modules/autoscaling/aws"
   version  = "7.3.1"
 

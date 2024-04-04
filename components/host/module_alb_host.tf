@@ -1,5 +1,5 @@
 module "alb_host" {
-  for_each = var.hosts
+  for_each = tomap(var.hosts)
   source   = "terraform-aws-modules/alb/aws"
   version  = "9.4.0"
 
