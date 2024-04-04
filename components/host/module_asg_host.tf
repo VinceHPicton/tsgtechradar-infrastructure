@@ -1,14 +1,14 @@
 module "asg_host" {
-  for_each = toset(var.hosts)
+  for_each = var.hosts
   source   = "terraform-aws-modules/autoscaling/aws"
   version  = "7.3.1"
 
   # Autoscaling group
-  name = "${local.csi}-${each.key}"
+  name = "${local.csi}-${each.value.name}"
 
-  min_size                  = 1
-  max_size                  = 1
-  desired_capacity          = 1
+  min_size                  = each.value.asg_min_size
+  max_size                  = each.value.asg_max_size
+  desired_capacity          = each.value.asg_min_size
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = data.aws_subnets.nat.ids
@@ -32,10 +32,10 @@ module "asg_host" {
   update_default_version      = true
 
   image_id      = data.aws_ami.amazon_linux_2023.id
-  instance_type = "t3.medium"
+  instance_type = each.value.instance_type
   #   key_name          = aws_key_pair.steve_mead_at_bjss_com.key_name
   #   user_data         = base64encode(data.cloudinit_config.web.rendered)
-  security_groups   = [module.sg_host[each.key].security_group_id]
+  security_groups   = [module.sg_host[each.value.name].security_group_id]
   ebs_optimized     = true
   enable_monitoring = true
 
@@ -50,7 +50,7 @@ module "asg_host" {
 
   # Autoscaling group traffic source attachment
   create_traffic_source_attachment = true
-  traffic_source_identifier        = module.alb_host[each.key].target_groups["asg_host"].arn
+  traffic_source_identifier        = module.alb_host[each.value.name].target_groups["asg_host"].arn
   traffic_source_type              = "elbv2"
 
   # Autoscaling group schedule
@@ -58,8 +58,8 @@ module "asg_host" {
 
   # IAM Role / Instance Profile
   create_iam_instance_profile = true
-  iam_instance_profile_name   = "${local.csi}-${each.key}"
-  iam_role_name               = "${local.csi}-${each.key}"
+  iam_instance_profile_name   = "${local.csi}-${each.value.name}"
+  iam_role_name               = "${local.csi}-${each.value.name}"
   iam_role_path               = "/ec2/"
   iam_role_description        = "TSG Technology Radar Web ASG"
   iam_role_tags = {
@@ -73,7 +73,7 @@ module "asg_host" {
   tags = merge(
     local.default_tags,
     {
-      "Name" = "${local.csi}-${each.key}"
+      "Name" = "${local.csi}-${each.value.name}"
     },
   )
 }

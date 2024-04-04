@@ -68,6 +68,11 @@ variable "web_port" {
 }
 
 variable "hosts" {
-  type        = list(string)
-  description = "List of Hosts to create"
+  type = map(object({
+    name          = string
+    instance_type = string
+    asg_min_size  = number
+    asg_max_size  = number
+  }))
+  description = "Configurable Host options"
 }
