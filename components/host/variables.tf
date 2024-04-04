@@ -35,7 +35,7 @@ variable "environment" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "template"
+  default     = "host"
 }
 
 variable "default_tags" {
@@ -55,3 +55,24 @@ variable "default_tags" {
 #   description = "External Id to use when assuming AWS role for deployment"
 #   default     = ""
 # }
+
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID to deploy into"
+}
+
+variable "web_port" {
+  type        = string
+  description = "Unprivileged port for the web app"
+  default     = "8080"
+}
+
+variable "hosts" {
+  type = map(object({
+    name          = string
+    instance_type = string
+    asg_min_size  = number
+    asg_max_size  = number
+  }))
+  description = "Configurable Host options"
+}
