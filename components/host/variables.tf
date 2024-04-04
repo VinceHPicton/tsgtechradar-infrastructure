@@ -60,3 +60,9 @@ variable "vpc_id" {
   type        = string
   description = "VPC ID to deploy into"
 }
+
+variable "web_port" {
+  type        = string
+  description = "Unprivileged port for the web app"
+  default     = "8080"
+}
