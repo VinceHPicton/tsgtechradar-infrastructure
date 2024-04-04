@@ -66,3 +66,8 @@ variable "web_port" {
   description = "Unprivileged port for the web app"
   default     = "8080"
 }
+
+variable "hosts" {
+  type        = list(string)
+  description = "List of Hosts to create"
+}

@@ -1,10 +1,11 @@
 module "alb_host" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "9.4.0"
+  for_each = var.hosts
+  source   = "terraform-aws-modules/alb/aws"
+  version  = "9.4.0"
 
   enable_deletion_protection = true
 
-  name    = "${local.csi}-host"
+  name    = "${local.csi}-${each.value}"
   vpc_id  = data.aws_vpc.selected.id
   subnets = data.aws_subnets.public.ids
 
@@ -89,7 +90,7 @@ module "alb_host" {
   tags = merge(
     local.default_tags,
     {
-      "Name" = "${local.csi}-host"
+      "Name" = "${local.csi}-${each.value}"
     },
   )
 }
