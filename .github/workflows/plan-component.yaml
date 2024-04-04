@@ -38,7 +38,7 @@ jobs:
     needs: [get_changed_components]
     strategy:
       matrix:
-        modules: ${{ fromJSON(needs.get_changed_components.outputs.matrix) }}
+        module: ${{ fromJSON(needs.get_changed_components.outputs.matrix) }}
       max-parallel: 4
       fail-fast: false
     steps:
@@ -67,7 +67,7 @@ jobs:
           bin/terraform.sh --action plan \
             --project ${{ vars.PROJECT }} \
             --region ${{ vars.REGION }} \
-            --component ${{ inputs.component }} \
+            --component ${{ matrix.module }} \
             --environment ${{ vars.ENVIRONMENT }} \
             --group ${{ vars.GROUP }} \
             --build-id ${{ github.run_id }}
