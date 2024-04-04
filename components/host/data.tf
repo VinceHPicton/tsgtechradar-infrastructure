@@ -20,7 +20,7 @@ data "aws_subnets" "nat" {
   }
 
   tags = {
-    Name = "${local.csi}-nat*"
+    Name = "${var.project}-${var.environment}-core-nat*"
   }
 }
 
