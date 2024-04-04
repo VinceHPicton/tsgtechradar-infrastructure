@@ -19,6 +19,9 @@ jobs:
       - name: Get all components that have changed
         id: changed-files
         uses: tj-actions/changed-files@v44
+        with:
+          dir_names: true
+          path: components
 
       - name: List all changed files
         env:
