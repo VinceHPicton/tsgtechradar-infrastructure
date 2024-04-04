@@ -75,8 +75,8 @@ jobs:
       - name: Generate TF Plan View
         id: tfplan-view
         run: |
-          cd "components/${{ inputs.component }}"
-          component=${{ inputs.component }}
+          cd "components/${{ matrix.module }}"
+          component=${{ matrix.module }}
           read component_name <<< "${component##*/}"
           if [ -f "build/${component_name}_${{ github.run_id }}.tfplan" ]; then
             echo "Getting plan for ${component_name}_${{ github.run_id }}.tfplan"

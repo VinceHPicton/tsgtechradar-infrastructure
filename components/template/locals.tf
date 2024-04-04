@@ -1,4 +1,4 @@
-locals { # tester
+locals {
   csi = replace(
     format(
       "%s-%s-%s",
