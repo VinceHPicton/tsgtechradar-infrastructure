@@ -38,6 +38,7 @@ data "aws_ami" "amazon_linux_2023" {
 }
 
 data "aws_iam_policy_document" "secrets_kms" {
+  #checkov:skip=CKV_AWS_111:Need to allow root user to write access
   statement {
     sid = "SM Allow Use of Key"
 
