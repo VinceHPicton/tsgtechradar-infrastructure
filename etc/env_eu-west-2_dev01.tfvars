@@ -18,4 +18,6 @@ hosts = {
   }
 }
 
+jira_ssm_parameter_name = "/jira/mvp"
+
 artefact_bucket = "tsgtr-302653724645-eu-west-2-tdev-ci-tfaps-main-cp"

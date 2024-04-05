@@ -29,11 +29,11 @@ runcmd:
   - mkdir -p /srv/tsgtechradar
   - useradd tsgtechradar
   - unzip /tmp/app.zip -d /srv/tsgtechradar
-  # - sed -i.bak 's/--port 8080/--port ${WEB_PORT}/' /srv/tsgtechradar/package.json
-  # - JIRA_API_KEY=`aws ssm get-parameter --name "${JIRA_SSM_PARAMETER_NAME}" --query "Parameter.Value" --output text`; sed -i.bak "s/JIRA_API_KEY=.*/JIRA_API_KEY=$JIRA_API_KEY/" /srv/tsgtechradar/.env
-  # - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar
-  # - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
-  # - su - tsgtechradar -c "cd /srv/tsgtechradar && nvm install"
-  # - su - tsgtechradar -c "cd /srv/tsgtechradar && npm install -g pnpm"
-  # - su - tsgtechradar -c "cd /srv/tsgtechradar && pnpm install"
-  # - su - tsgtechradar -c "cd /srv/tsgtechradar && nohup pnpm run production > /dev/null 2>&1 &"
+  - sed -i.bak 's/--port 8080/--port ${WEB_PORT}/' /srv/tsgtechradar/package.json
+  - JIRA_API_KEY=`aws ssm get-parameter --name "${JIRA_SSM_PARAMETER_NAME}" --query "Parameter.Value" --output text`; sed -i.bak "s/JIRA_API_KEY=.*/JIRA_API_KEY=$JIRA_API_KEY/" /srv/tsgtechradar/.env
+  - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar
+  - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+  - su - tsgtechradar -c "cd /srv/tsgtechradar && nvm install"
+  - su - tsgtechradar -c "cd /srv/tsgtechradar && npm install -g pnpm"
+  - su - tsgtechradar -c "cd /srv/tsgtechradar && pnpm install"
+  - su - tsgtechradar -c "cd /srv/tsgtechradar && nohup pnpm run production > /dev/null 2>&1 &"
