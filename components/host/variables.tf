@@ -76,3 +76,8 @@ variable "hosts" {
   }))
   description = "Configurable Host options"
 }
+
+variable "artefact_bucket" {
+  type        = string
+  description = "S3 Bucket Containing code artefacts"
+}

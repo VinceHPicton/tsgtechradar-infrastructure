@@ -17,3 +17,5 @@ hosts = {
     asg_max_size  = 1
   }
 }
+
+artefact_bucket = "tsgtr-302653724645-eu-west-2-tdev-ci-tfaps-main-cp"
