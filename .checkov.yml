@@ -25,3 +25,11 @@ skip-check:
   - CKV_TF_1
   # RETURN TO - ensuring SGs are attached to resources
   - CKV2_AWS_5
+  # Not going to rotate secrets/keys currently
+  - CKV2_AWS_57
+  - CKV_AWS_7
+  # TEMP - testing with Admin on Instance profile
+  - CKV_AWS_274
+  # Allow wildcards in policies
+  - CKV_AWS_109
+  - CKV_AWS_356

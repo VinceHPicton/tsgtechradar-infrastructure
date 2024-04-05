@@ -1,5 +1,5 @@
 resource "aws_iam_instance_profile" "host" {
-  name = "${local.csi}-host"
+  name = "${local.csi}-profile"
   path = "/ec2/"
   role = aws_iam_role.host.name
 }
@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "host" {
-  name        = "${local.csi}-host"
+  name        = "${local.csi}-role"
   description = "TSG Technology Radar Web ASG"
 
   path               = "/"
@@ -26,7 +26,7 @@ resource "aws_iam_role" "host" {
 
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:aws:iam::aws:policy/AdministratorAccess"
+    "arn:aws:iam::aws:policy/AdministratorAccess" # need to change
   ]
 
   tags = merge(

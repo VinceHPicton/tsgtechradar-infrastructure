@@ -67,6 +67,12 @@ variable "web_port" {
   default     = "8080"
 }
 
+variable "jira_ssm_parameter_name" {
+  type        = string
+  description = "Name of the SSM parameter which stores the Jira API key used by the MVP"
+  default     = ""
+}
+
 variable "hosts" {
   type = map(object({
     name          = string
@@ -75,4 +81,9 @@ variable "hosts" {
     asg_max_size  = number
   }))
   description = "Configurable Host options"
+}
+
+variable "artefact_bucket" {
+  type        = string
+  description = "S3 Bucket Containing code artefacts"
 }
