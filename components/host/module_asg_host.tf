@@ -57,18 +57,8 @@ module "asg_host" {
   # Autoscaling policy
 
   # IAM Role / Instance Profile
-  create_iam_instance_profile = true
-  iam_instance_profile_name   = "${local.csi}-${each.value.name}"
-  iam_role_name               = "${local.csi}-${each.value.name}"
-  iam_role_path               = "/ec2/"
-  iam_role_description        = "TSG Technology Radar Web ASG"
-  iam_role_tags = {
-    CustomIamRole = "Yes"
-  }
-  iam_role_policies = {
-    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-    AdministratorAccess          = "arn:aws:iam::aws:policy/AdministratorAccess"
-  }
+  create_iam_instance_profile = false
+  iam_instance_profile_arn    = aws_iam_instance_profile.host.arn
 
   tags = merge(
     local.default_tags,
