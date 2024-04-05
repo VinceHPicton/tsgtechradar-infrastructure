@@ -12,9 +12,20 @@ resource "aws_key_pair" "keypair" {
   )
 }
 
+resource "aws_kms_key" "secrets" {
+  description = "CMK for Secrets Manager"
+  policy      = data.aws_iam_policy_document.secrets_kms
+}
+
+resource "aws_kms_alias" "secrets" {
+  name          = "alias/${local.csi}-secrets"
+  target_key_id = aws_kms_key.secrets.key_id
+}
+
 resource "aws_secretsmanager_secret" "secret_key" {
   name_prefix = local.csi
   description = "Key Pair for Host EC2 instances"
+  kms_key_id  = "alias/${local.csi}-secrets"
   tags = merge(
     local.default_tags,
     { "Name" : "${local.csi}-host" }
