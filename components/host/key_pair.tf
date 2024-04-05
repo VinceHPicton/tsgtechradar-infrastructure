@@ -25,7 +25,7 @@ resource "aws_kms_alias" "secrets" {
 resource "aws_secretsmanager_secret" "secret_key" {
   name_prefix = local.csi
   description = "Key Pair for Host EC2 instances"
-  kms_key_id  = "alias/${local.csi}-secrets"
+  kms_key_id  = aws_kms_alias.secrets.id
   tags = merge(
     local.default_tags,
     { "Name" : "${local.csi}-host" }
