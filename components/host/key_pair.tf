@@ -14,7 +14,7 @@ resource "aws_key_pair" "keypair" {
 
 resource "aws_kms_key" "secrets" {
   description = "CMK for Secrets Manager"
-  policy      = data.aws_iam_policy_document.secrets_kms
+  policy      = data.aws_iam_policy_document.secrets_kms.json
 }
 
 resource "aws_kms_alias" "secrets" {
