@@ -58,7 +58,7 @@ module "asg_host" {
 
   # IAM Role / Instance Profile
   create_iam_instance_profile = false
-  iam_instance_profile_name   = aws_iam_instance_profile.host.name
+  iam_instance_profile_arn    = aws_iam_instance_profile.host.arn
 
   tags = merge(
     local.default_tags,
