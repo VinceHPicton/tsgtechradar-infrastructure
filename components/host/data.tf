@@ -39,6 +39,8 @@ data "aws_ami" "amazon_linux_2023" {
 
 data "aws_iam_policy_document" "secrets_kms" {
   statement {
+    sid = "SM Allow Use of Key"
+
     actions = [
       "kms:Encrypt",
       "kms:Decrypt",
@@ -70,6 +72,8 @@ data "aws_iam_policy_document" "secrets_kms" {
   }
 
   statement {
+    sid = "SM Generate Key"
+
     actions = [
       "kms:GenerateDataKey*"
     ]
@@ -97,18 +101,30 @@ data "aws_iam_policy_document" "secrets_kms" {
   }
 
   statement {
+    sid = "Admin of Key"
     actions = [
+      "kms:Create*",
       "kms:Describe*",
-      "kms:Get*",
+      "kms:Enable*",
       "kms:List*",
-      "kms:RevokeGrant"
+      "kms:Put*",
+      "kms:Update*",
+      "kms:Revoke*",
+      "kms:Disable*",
+      "kms:Get*",
+      "kms:Delete*",
+      "kms:ScheduleKeyDeletion",
+      "kms:CancelKeyDeletion"
     ]
 
     effect = "Allow"
 
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.aws_account_id}:root"]
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${var.aws_account_id}:root",
+        "arn:aws:iam::${var.aws_account_id}:role/DeploymentExecution"
+      ]
     }
 
     resources = ["*"]
