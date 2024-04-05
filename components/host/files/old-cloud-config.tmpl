@@ -1,0 +1,39 @@
+#cloud-config
+# See documentation for more configuration examples
+# https://cloudinit.readthedocs.io/en/latest/reference/examples.html
+
+# Upgrade the instance on first boot
+package_upgrade: true
+
+# Install arbitrary packages
+# https://cloudinit.readthedocs.io/en/latest/reference/examples.html#install-arbitrary-packages
+packages:
+  # - npm
+  - unzip
+
+# Run commands on first boot
+# https://cloudinit.readthedocs.io/en/latest/reference/examples.html#run-commands-on-first-boot
+runcmd:
+  # - [ ls, -l, / ]
+  # - [ sh, -xc, "echo $(date) ': hello world!'" ]
+  - [ sh, -c, echo "=========hello world=========" ]
+  # - sed -i 's/^Listen.*/Listen ${WEB_PORT}/' /etc/httpd/conf/httpd.conf
+  # - echo '<html><body><h1>It works!!!!!</h1></body></html>' > /var/www/html/index.html
+  # - [ systemctl, enable, httpd.service ]
+  # - [ systemctl, start, httpd.service ]
+  # - git --version
+  - sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+  - sudo systemctl status amazon-ssm-agent
+  - sudo systemctl start amazon-ssm-agent
+  - aws s3 cp s3://${ARTIFACT_BUCKET}/${CSI}-app.zip /tmp/app.zip
+  - mkdir -p /srv/tsgtechradar
+  - useradd tsgtechradar
+  - unzip /tmp/app.zip -d /srv/tsgtechradar
+  # - sed -i.bak 's/--port 8080/--port ${WEB_PORT}/' /srv/tsgtechradar/package.json
+  # - JIRA_API_KEY=`aws ssm get-parameter --name "${JIRA_SSM_PARAMETER_NAME}" --query "Parameter.Value" --output text`; sed -i.bak "s/JIRA_API_KEY=.*/JIRA_API_KEY=$JIRA_API_KEY/" /srv/tsgtechradar/.env
+  # - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar
+  # - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+  # - su - tsgtechradar -c "cd /srv/tsgtechradar && nvm install"
+  # - su - tsgtechradar -c "cd /srv/tsgtechradar && npm install -g pnpm"
+  # - su - tsgtechradar -c "cd /srv/tsgtechradar && pnpm install"
+  # - su - tsgtechradar -c "cd /srv/tsgtechradar && nohup pnpm run production > /dev/null 2>&1 &"
