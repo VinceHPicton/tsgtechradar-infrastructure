@@ -33,7 +33,7 @@ module "asg_host" {
 
   image_id      = data.aws_ami.amazon_linux_2023.id
   instance_type = each.value.instance_type
-  #   key_name          = aws_key_pair.steve_mead_at_bjss_com.key_name
+  key_name      = aws_key_pair.keypair.key_name
   #   user_data         = base64encode(data.cloudinit_config.web.rendered)
   security_groups   = [module.sg_host[each.value.name].security_group_id]
   ebs_optimized     = true
