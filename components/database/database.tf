@@ -14,16 +14,16 @@ module "rds_db" {
   identifier = local.csi
 
   engine               = "postgres"
-  engine_version       = "16"
-  family               = "postgres16"
-  major_engine_version = 16
+  engine_version       = "15"
+  family               = "postgres15"
+  major_engine_version = 15
 
   instance_class    = "db.t3.micro"
   allocated_storage = 5
 
   db_name  = "postgres"
   username = "postgres"
-  port     = "3306"
+  port     = "5432"
 
   manage_master_user_password_rotation              = true
   master_user_password_rotate_immediately           = false
