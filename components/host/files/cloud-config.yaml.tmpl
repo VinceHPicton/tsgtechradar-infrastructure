@@ -17,15 +17,11 @@ runcmd:
   - sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
   - sudo systemctl status amazon-ssm-agent
   - sudo systemctl start amazon-ssm-agent
-  - aws s3 cp s3://${ARTIFACT_BUCKET}/app.zip /tmp/app.zip
-  - mkdir -p /srv/tsgtechradar
-  - useradd tsgtechradar
-  - unzip /tmp/app.zip -d /srv/tsgtechradar
-  - sed -i.bak 's/--port 8080/--port ${WEB_PORT}/' /srv/tsgtechradar/package.json
-  - JIRA_API_KEY=`aws ssm get-parameter --name "${JIRA_SSM_PARAMETER_NAME}" --query "Parameter.Value" --output text`; sed -i.bak "s/JIRA_API_KEY=.*/JIRA_API_KEY=$JIRA_API_KEY/" /srv/tsgtechradar/.env
-  - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar
-  - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && nvm install"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && npm install -g pnpm"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && pnpm install"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && nohup pnpm run production > /dev/null 2>&1 &"
+  - sudo yum install -y docker
+  - sudo systemctl start docker
+  - sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+  - curl -fsSL https://get.pnpm.io/install.sh | sh -
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+  - source ~/.bashrc
+  - nvm install --lts
