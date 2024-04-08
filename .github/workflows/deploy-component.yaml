@@ -14,6 +14,7 @@ on:
         options:
           - template
           - host
+          - database
       environment:
         description: Environment to deploy into
         type: choice
