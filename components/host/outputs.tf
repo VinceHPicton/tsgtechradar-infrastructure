@@ -15,5 +15,5 @@ output "public_subnets" {
 
 output "nat_subnets" {
   description = "NAT Subnets"
-  value       = data.aws_subnets.nat.ids
+  value       = data.aws_subnets.private.ids
 }

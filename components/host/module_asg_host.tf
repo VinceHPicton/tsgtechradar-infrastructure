@@ -11,7 +11,7 @@ module "asg_host" {
   desired_capacity          = each.value.asg_min_size
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
-  vpc_zone_identifier       = data.aws_subnets.nat.ids
+  vpc_zone_identifier       = data.aws_subnets.private.ids
 
   initial_lifecycle_hooks = []
 
