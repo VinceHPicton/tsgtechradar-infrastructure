@@ -30,6 +30,7 @@ on:
         options:
           - plan
           - apply
+          - plan-destroy
           - destroy
 
 permissions:
@@ -64,7 +65,7 @@ jobs:
       - name: Terraform Plan
         id: tfplan
         run: |
-          ACTION=$(if [[ "${{ inputs.mode }}" == "destroy" ]]; then echo "plan-destroy"; else echo "plan"; fi)
+          ACTION=$(if [[ "${{ inputs.mode }}" == "*destroy*" ]]; then echo "plan-destroy"; else echo "plan"; fi)
           bin/terraform.sh --action "${ACTION}" \
             --project ${{ vars.PROJECT }} \
             --region ${{ vars.REGION }} \
@@ -93,11 +94,22 @@ jobs:
       - name: Apply Terraform
         if: ${{ inputs.mode == 'apply' || inputs.mode == 'destroy' }}
         run: |
-          BUILD_ID=$(if [[ "${{ inputs.mode }}" == "apply" ]]; then echo "${{ github.run_id }}"; fi)
-          bin/terraform.sh --action ${{ inputs.mode }} \
-            --project ${{ vars.PROJECT }} \
-            --region ${{ vars.REGION }} \
-            --component ${{ inputs.component }} \
-            --environment ${{ vars.ENVIRONMENT }} \
-            --group ${{ vars.GROUP }} \
-            --build-id "${BUILD_ID}"
+          if [[ "${{ inputs.mode }}" == "apply" ]]; then
+            bin/terraform.sh --action ${{ inputs.mode }} \
+              --project ${{ vars.PROJECT }} \
+              --region ${{ vars.REGION }} \
+              --component ${{ inputs.component }} \
+              --environment ${{ vars.ENVIRONMENT }} \
+              --group ${{ vars.GROUP }} \
+              --build-id ${{ github.run_id }}
+          elif [[ "${{ inputs.mode }}" == "destroy" ]]; then
+            bin/terraform.sh --action ${{ inputs.mode }} \
+              --project ${{ vars.PROJECT }} \
+              --region ${{ vars.REGION }} \
+              --component ${{ inputs.component }} \
+              --environment ${{ vars.ENVIRONMENT }} \
+              --group ${{ vars.GROUP }}
+          else
+            echo "Invalid input parameter"
+            exit 1
+          fi
