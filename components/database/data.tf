@@ -13,7 +13,18 @@ data "aws_subnets" "private" {
   }
 }
 
-data "aws_subnet" "private" {
-  for_each = toset(data.aws_subnets.private.ids)
+data "aws_subnets" "nat" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+
+  tags = {
+    Name = "${var.project}-${var.environment}-core-nat*"
+  }
+}
+
+data "aws_subnet" "nat" {
+  for_each = toset(data.aws_subnets.nat.ids)
   id       = each.value
 }

@@ -10,7 +10,7 @@ module "security_group" {
   ingress_with_cidr_blocks = [
     {
       rule        = "postgresql-tcp"
-      cidr_blocks = local.private_subnet_cidrs
+      cidr_blocks = local.nat_subnet_cidrs
     }
   ]
 

@@ -13,14 +13,14 @@ data "aws_subnets" "public" {
   }
 }
 
-data "aws_subnets" "private" {
+data "aws_subnets" "nat" {
   filter {
     name   = "vpc-id"
     values = [var.vpc_id]
   }
 
   tags = {
-    Type = "private"
+    Name = "${var.project}-${var.environment}-core-nat*"
   }
 }
 
