@@ -10,6 +10,8 @@ package_upgrade: true
 packages:
   # - npm
   - unzip
+  - docker
+  - httpd
 
 # Run commands on first boot
 # https://cloudinit.readthedocs.io/en/latest/reference/examples.html#run-commands-on-first-boot
@@ -17,8 +19,8 @@ runcmd:
   - sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
   - sudo systemctl status amazon-ssm-agent
   - sudo systemctl start amazon-ssm-agent
-  - sudo yum install -y docker
   - sudo systemctl start docker
+  - sudo service httpd start
   - sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
   - sudo chmod +x /usr/local/bin/docker-compose
   - curl -fsSL https://get.pnpm.io/install.sh | sh -
