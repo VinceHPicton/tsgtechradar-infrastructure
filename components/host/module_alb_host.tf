@@ -10,6 +10,7 @@ module "alb_host" {
   subnets = data.aws_subnets.public.ids
 
   # Security Group
+  security_group_name = "${local.csi}-${each.value.name}-asg-sg"
   security_group_ingress_rules = {
     # all_http = {
     #   from_port   = 80
@@ -62,6 +63,13 @@ module "alb_host" {
     }
   }
 
+  security_group_tags = merge(
+    local.default_tags,
+    {
+      "Name" = "${local.csi}-${each.value.name}-asg-sg"
+    }
+  )
+
   listeners = {
     ex_http = {
       port     = 80
@@ -91,6 +99,6 @@ module "alb_host" {
     local.default_tags,
     {
       "Name" = "${local.csi}-${each.value.name}"
-    },
+    }
   )
 }
