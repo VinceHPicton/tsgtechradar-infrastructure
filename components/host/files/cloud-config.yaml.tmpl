@@ -27,3 +27,11 @@ runcmd:
   - aws s3 cp s3://${ARTIFACT_BUCKET}/dev/backend.zip /tmp/backend.zip
   - unzip /tmp/frontend.zip -d /srv/frontend
   - unzip /tmp/backend.zip -d /srv/backend
+  - USERNAME=$(aws secretsmanager get-secret-value --secret-id "${HOST_SECRET_NAME}" | jq -r '.SecretString' | jq -r '.username')
+  - useradd "$USERNAME"
+  - usermod -aG docker "$USERNAME"
+  - su - "$USERNAME" -c "curl -fsSL https://get.pnpm.io/install.sh | sh -"
+  - su - "$USERNAME" -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+  - su - "$USERNAME" -c "nvm install --lts"
+  - chown -R "$USERNAME":"$USERNAME" /srv/frontend
+  - chown -R "$USERNAME":"$USERNAME" /srv/backend
