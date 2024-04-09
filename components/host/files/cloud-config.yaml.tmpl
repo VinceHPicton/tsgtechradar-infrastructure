@@ -40,4 +40,6 @@ runcmd:
   - su - "$USERNAME" -c "docker-compose up -d"
   - su - "$USERNAME" -c "pnpm install"
   - su - "$USERNAME" -c "nohup pnpm start:prod > /dev/null 2>&1 &"
-  - su -
+  - cd /srv/frontend
+  - su - "$USERNAME" -c "pnpm install"
+  - su - "$USERNAME" -c "nohup pnpm production > /dev/null 2>&1 &"
