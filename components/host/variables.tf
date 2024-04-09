@@ -64,7 +64,7 @@ variable "vpc_id" {
 variable "web_port" {
   type        = string
   description = "Unprivileged port for the web app"
-  default     = "8080"
+  default     = "3000"
 }
 
 variable "jira_ssm_parameter_name" {
