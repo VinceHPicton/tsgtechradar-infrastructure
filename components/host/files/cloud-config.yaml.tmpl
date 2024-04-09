@@ -35,11 +35,9 @@ runcmd:
   - su - "$USERNAME" -c "nvm install --lts"
   - chown -R "$USERNAME":"$USERNAME" /srv/frontend
   - chown -R "$USERNAME":"$USERNAME" /srv/backend
-  - cd /srv/backend
-  - su - "$USERNAME" -c "./scripts/build.sh"
-  - su - "$USERNAME" -c "docker-compose up -d"
-  - su - "$USERNAME" -c "pnpm install"
-  - su - "$USERNAME" -c "nohup pnpm start:prod > /dev/null 2>&1 &"
-  - cd /srv/frontend
-  - su - "$USERNAME" -c "pnpm install"
-  - su - "$USERNAME" -c "nohup pnpm production > /dev/null 2>&1 &"
+  - su - "$USERNAME" -c "cd /srv/backend/ && ./scripts/build.sh"
+  - su - "$USERNAME" -c "cd /srv/backend/ && docker-compose up -d"
+  - su - "$USERNAME" -c "cd /srv/backend/ && pnpm install"
+  - su - "$USERNAME" -c "cd /srv/backend/ && nohup pnpm start:prod > /dev/null 2>&1 &"
+  - su - "$USERNAME" -c "cd /srv/frontend/ && pnpm install"
+  - su - "$USERNAME" -c "cd /srv/frontend/ && nohup pnpm production > /dev/null 2>&1 &"
