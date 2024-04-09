@@ -12,6 +12,7 @@ data "cloudinit_config" "host" {
         ARTIFACT_BUCKET         = var.artefact_bucket
         WEB_PORT                = var.web_port
         JIRA_SSM_PARAMETER_NAME = var.jira_ssm_parameter_name
+        HOST_SECRET_NAME        = "${local.csi}-credentials"
       }
     )
   }

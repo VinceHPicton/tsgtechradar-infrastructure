@@ -10,6 +10,7 @@ package_upgrade: true
 packages:
   # - npm
   - unzip
+  - docker
 
 # Run commands on first boot
 # https://cloudinit.readthedocs.io/en/latest/reference/examples.html#run-commands-on-first-boot
@@ -17,17 +18,20 @@ runcmd:
   - sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
   - sudo systemctl status amazon-ssm-agent
   - sudo systemctl start amazon-ssm-agent
-  - sudo yum install -y docker
   - sudo systemctl start docker
-  - aws s3 cp s3://${ARTIFACT_BUCKET}/app.zip /tmp/app.zip
-  - mkdir -p /srv/tsgtechradar
-  - useradd tsgtechradar
-  - unzip /tmp/app.zip -d /srv/tsgtechradar
-  - sed -i.bak 's/--port 8080/--port ${WEB_PORT}/' /srv/tsgtechradar/package.json
-  - JIRA_API_KEY=`aws ssm get-parameter --name "${JIRA_SSM_PARAMETER_NAME}" --query "Parameter.Value" --output text`; sed -i.bak "s/JIRA_API_KEY=.*/JIRA_API_KEY=$JIRA_API_KEY/" /srv/tsgtechradar/.env
-  - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar
+  - sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+  - mkdir -p /srv/frontend
+  - mkdir -p /srv/backend
+  - aws s3 cp s3://${ARTIFACT_BUCKET}/dev/frontend.zip /tmp/frontend.zip
+  - aws s3 cp s3://${ARTIFACT_BUCKET}/dev/backend.zip /tmp/backend.zip
+  - USERNAME=$(aws secretsmanager get-secret-value --secret-id "${HOST_SECRET_NAME}" | jq -r '.SecretString' | jq -r '.username')
+  - useradd "$USERNAME"
+  - usermod -aG docker "$USERNAME"
+  - unzip /tmp/frontend.zip -d /srv/frontend
+  - unzip /tmp/backend.zip -d /srv/backend
+  - su - tsgtechradar -c "curl -fsSL https://get.pnpm.io/install.sh | sh -"
   - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && nvm install"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && npm install -g pnpm"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && pnpm install"
-  - su - tsgtechradar -c "cd /srv/tsgtechradar && nohup pnpm run production > /dev/null 2>&1 &"
+  - su - tsgtechradar -c "nvm install --lts"
+  - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar
+  - chown -R tsgtechradar:tsgtechradar /srv/tsgtechradar-backend

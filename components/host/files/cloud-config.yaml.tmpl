@@ -21,7 +21,9 @@ runcmd:
   - sudo systemctl start docker
   - sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
   - sudo chmod +x /usr/local/bin/docker-compose
-  - curl -fsSL https://get.pnpm.io/install.sh | sh -
-  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
-  - source ~/.bashrc
-  - nvm install --lts
+  - mkdir -p /srv/frontend
+  - mkdir -p /srv/backend
+  - aws s3 cp s3://${ARTIFACT_BUCKET}/dev/frontend.zip /tmp/frontend.zip
+  - aws s3 cp s3://${ARTIFACT_BUCKET}/dev/backend.zip /tmp/backend.zip
+  - unzip /tmp/frontend.zip -d /srv/frontend
+  - unzip /tmp/backend.zip -d /srv/backend
