@@ -61,12 +61,12 @@ variable "vpc_id" {
   description = "VPC ID to deploy into"
 }
 
-# variable "hosts" {
-#   type = map(object({
-#     name          = string
-#     instance_type = string
-#     asg_min_size  = number
-#     asg_max_size  = number
-#   }))
-#   description = "Configurable Host options"
-# }
+variable "hosts" {
+  type = map(object({
+    name                 = string
+    db_instance_type     = string
+    db_allocated_storage = number
+    db_snapshot_id       = optional(string, null)
+  }))
+  description = "Configurable Host options"
+}

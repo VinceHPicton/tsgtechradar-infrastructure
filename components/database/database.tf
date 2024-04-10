@@ -8,18 +8,19 @@ resource "aws_db_subnet_group" "private" {
 }
 
 module "rds_db" {
-  source  = "terraform-aws-modules/rds/aws"
-  version = "6.5.4"
+  for_each = var.hosts
+  source   = "terraform-aws-modules/rds/aws"
+  version  = "6.5.4"
 
-  identifier = local.csi
+  identifier = "${local.csi}-${each.value.name}"
 
   engine               = "postgres"
   engine_version       = "15"
   family               = "postgres15"
   major_engine_version = 15
 
-  instance_class    = "db.t3.micro"
-  allocated_storage = 5
+  instance_class    = each.value.db_instance_type
+  allocated_storage = each.value.db_allocated_storage
 
   db_name  = "postgres"
   username = "postgres"
@@ -37,6 +38,7 @@ module "rds_db" {
   backup_retention_period = 1
   skip_final_snapshot     = true
   deletion_protection     = false
+  snapshot_identifier     = each.value.db_snapshot_id
 
   vpc_security_group_ids = [module.security_group.security_group_id]
 
@@ -47,7 +49,7 @@ module "rds_db" {
   tags = merge(
     local.default_tags,
     {
-      "Name" = local.csi
+      "Name" = "${local.csi}-${each.value.name}"
     },
   )
 }

@@ -4,6 +4,8 @@ output "tags" {
 }
 
 output "database_hostname" {
-  description = "Endpoint of the DB"
-  value       = module.rds_db.db_instance_endpoint
+  description = "Endpoint of the DBs"
+  value = [
+    for db in module.rds_db : db.db_instance_endpoint
+  ]
 }
