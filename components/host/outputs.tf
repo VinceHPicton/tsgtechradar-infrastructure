@@ -20,5 +20,5 @@ output "nat_subnets" {
 
 output "database_hostname" {
   description = "Endpoint of the DBs"
-  value       = module.database.db_instance_endpoint
+  value       = module.database.db_instance_address
 }

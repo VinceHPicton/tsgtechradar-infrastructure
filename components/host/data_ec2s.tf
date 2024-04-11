@@ -24,7 +24,7 @@ data "cloudinit_config" "host" {
       {
         ARTIFACT_BUCKET         = var.artefact_bucket
         ENVIRONMENT             = var.environment
-        DB_HOSTNAME             = module.database.db_instance_endpoint
+        DB_HOSTNAME             = module.database.db_instance_address
         DB_SECRET_ARN           = module.database.db_instance_master_user_secret_arn
         JIRA_SSM_PARAMETER_NAME = var.jira_ssm_parameter_name
       }
