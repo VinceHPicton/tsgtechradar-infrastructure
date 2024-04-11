@@ -73,14 +73,22 @@ variable "jira_ssm_parameter_name" {
   default     = ""
 }
 
-variable "hosts" {
-  type = map(object({
-    name          = string
+variable "asg_config" {
+  type = object({
     instance_type = string
     asg_min_size  = number
     asg_max_size  = number
-  }))
-  description = "Configurable Host options"
+  })
+  description = "Configurable ALB options"
+}
+
+variable "database_config" {
+  type = object({
+    db_instance_type     = string
+    db_allocated_storage = number
+    db_snapshot_id       = optional(string, null)
+  })
+  description = "Configurable Database options"
 }
 
 variable "artefact_bucket" {

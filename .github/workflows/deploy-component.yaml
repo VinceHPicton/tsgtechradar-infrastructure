@@ -14,14 +14,14 @@ on:
         options:
           - template
           - host
-          - database
       environment:
         description: Environment to deploy into
         type: choice
         required: true
-        default: acedev
+        default: dev01
         options:
-          - acedev
+          - dev01
+          - stable01
       mode:
         description: Mode to run terraform in
         type: choice

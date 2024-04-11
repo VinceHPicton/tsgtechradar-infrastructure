@@ -22,4 +22,6 @@ locals {
       env         = var.environment
     },
   )
+
+  nat_subnet_cidrs = join(",", [for s in data.aws_subnet.nat : s.cidr_block])
 }
