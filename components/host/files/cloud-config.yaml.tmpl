@@ -34,8 +34,8 @@ runcmd:
   - DB_USERNAME=$(aws secretsmanager get-secret-value --secret-id "${DB_SECRET_ARN}" | jq -r '.SecretString' | jq -r '.username')
   - DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id "${DB_SECRET_ARN}" | jq -r '.SecretString' | jq -r '.password')
   - sed -i.bak 's/DB_HOST=localhost/DB_HOST="${DB_HOSTNAME}"/' /srv/backend/.env
-  - sed -i.bak 's/DB_USER=pguser/DB_USER="$DB_USERNAME"/' /srv/backend/.env
-  - sed -i.bak 's/DB_PASSWORD=pgpass/DB_PASSWORD="$DB_PASSWORD"/' /srv/backend/.env
+  - sed -i.bak "s/DB_USER=pguser/DB_USER=$DB_USERNAME/" /srv/backend/.env
+  - sed -i.bak "s/DB_PASSWORD=pgpass/DB_PASSWORD=$DB_PASSWORD/" /srv/backend/.env
   - sed -i.bak 's/DB_NAME=tsgtechradar/DB_NAME=postgres/' /srv/backend/.env
   - su - tsgtechradar -c "curl -fsSL https://get.pnpm.io/install.sh | sh -"
   - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
