@@ -12,6 +12,7 @@ packages:
   - unzip
   - docker
   - postgresql15
+  - lsof
 
 # Run commands on first boot
 # https://cloudinit.readthedocs.io/en/latest/reference/examples.html#run-commands-on-first-boot
@@ -36,9 +37,3 @@ runcmd:
   - su - "$USERNAME" -c "nvm install --lts"
   - chown -R "$USERNAME":"$USERNAME" /srv/frontend
   - chown -R "$USERNAME":"$USERNAME" /srv/backend
-  - su - "$USERNAME" -c "cd /srv/backend/ && ./scripts/build.sh"
-  - su - "$USERNAME" -c "cd /srv/backend/ && docker-compose up -d"
-  - su - "$USERNAME" -c "cd /srv/backend/ && pnpm install && pnpm build"
-  - su - "$USERNAME" -c "cd /srv/backend/ && nohup pnpm start:prod > /dev/null 2>&1 &"
-  - su - "$USERNAME" -c "cd /srv/frontend/ && pnpm install"
-  - su - "$USERNAME" -c "cd /srv/frontend/ && nohup pnpm production > /dev/null 2>&1 &"

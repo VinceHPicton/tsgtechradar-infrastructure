@@ -26,6 +26,23 @@ module "rds_db" {
   username = "postgres"
   port     = "5432"
 
+  create_db_parameter_group = true
+  parameter_group_name      = "${local.csi}-${each.value.name}-parameter-group"
+
+  parameters = [
+    {
+      name  = "rds.force_ssl"
+      value = "0"
+    }
+  ]
+
+  db_parameter_group_tags = merge(
+    local.default_tags,
+    {
+      "Name" = "${local.csi}-${each.value.name}-parameter-group"
+    },
+  )
+
   manage_master_user_password_rotation              = true
   master_user_password_rotate_immediately           = false
   master_user_password_rotation_schedule_expression = "rate(15 days)"
