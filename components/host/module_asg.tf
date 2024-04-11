@@ -3,7 +3,7 @@ module "asg_host" {
   version = "7.3.1"
 
   # Autoscaling group
-  name = "${local.csi}-asg"
+  name = local.csi
 
   min_size                  = var.asg_config.asg_min_size
   max_size                  = var.asg_config.asg_max_size
@@ -62,7 +62,7 @@ module "asg_host" {
   tags = merge(
     local.default_tags,
     {
-      "Name" = "${local.csi}-asg"
+      "Name" = local.csi
     },
   )
 }

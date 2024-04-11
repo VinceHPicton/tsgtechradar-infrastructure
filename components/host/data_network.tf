@@ -31,7 +31,7 @@ data "aws_subnets" "nat" {
   }
 
   tags = {
-    Name = "${var.project}-${var.environment}-core-nat*"
+    Name = "${var.project}-*-core-nat*"
   }
 }
 
