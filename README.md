@@ -29,5 +29,5 @@ You will need to obtain the RDS DB username and password from Secrets Manager fi
 From one of the EC2 instances:
 
 ```sh
-psql --host="${DB_NAME}" --port=5432 --username=postgres --dbname=postgres
+psql --port=5432 --username=postgres --dbname=postgres --host="${DB_NAME}"
 ```
