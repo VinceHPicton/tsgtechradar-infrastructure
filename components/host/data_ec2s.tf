@@ -26,9 +26,7 @@ data "cloudinit_config" "host" {
         ENVIRONMENT             = var.environment
         DB_HOSTNAME             = module.database.db_instance_endpoint
         DB_SECRET_ARN           = module.database.db_instance_master_user_secret_arn
-        WEB_PORT                = var.web_port
         JIRA_SSM_PARAMETER_NAME = var.jira_ssm_parameter_name
-        HOST_SECRET_NAME        = "${local.csi}-credentials"
       }
     )
   }
