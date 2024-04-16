@@ -1,6 +1,8 @@
 environment = "dev01"
 region      = "eu-west-2"
 
+domain_name = "dev.tsgtechradar.bjss.com"
+
 vpc_id = "vpc-03b13b4ff6b52ade6"
 
 asg_config = {

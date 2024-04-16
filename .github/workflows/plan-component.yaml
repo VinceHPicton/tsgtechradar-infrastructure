@@ -45,6 +45,13 @@ jobs:
       max-parallel: 4
       fail-fast: false
     steps:
+      - name: Check valid deployment
+        run: |
+          if [[ ${{ matrix.module }} == "domains" ]]; then
+            echo "Not deploying domains component to dev environment"
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:

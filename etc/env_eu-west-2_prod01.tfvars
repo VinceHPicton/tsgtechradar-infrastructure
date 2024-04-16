@@ -1,9 +1,9 @@
-environment = "stable01"
+environment = "prod01"
 region      = "eu-west-2"
 
-domain_name = "stable.tsgtechradar.bjss.com"
+domain_name = "tsgtechradar.bjss.com"
 
-vpc_id = "vpc-03b13b4ff6b52ade6"
+vpc_id = "vpc-0276830dfaa7f3009"
 
 asg_config = {
   instance_type = "t3.medium"
@@ -14,9 +14,9 @@ asg_config = {
 database_config = {
   db_instance_type     = "db.t3.micro"
   db_allocated_storage = 5
-  db_snapshot_id       = "tsgtr-dev01-database-init"
+  db_snapshot_id       = ""
 }
 
 jira_ssm_parameter_name = "/jira/mvp"
 
-artefact_bucket = "tsgtr-302653724645-eu-west-2-tdev-ci-tfaps-main-cp"
+# artefact_bucket = "tsgtr-302653724645-eu-west-2-tdev-ci-tfaps-main-cp"
