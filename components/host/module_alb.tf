@@ -46,6 +46,14 @@ module "alb" {
     }
   }
 
+  route53_records = {
+    A = {
+      zone_id = data.aws_route53_zone.domain.id
+      name    = var.domain_name
+      type    = "A"
+    }
+  }
+
   tags = merge(
     local.default_tags,
     {
