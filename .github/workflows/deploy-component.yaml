@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Check valid
         run: |
-          if [[ ${{ matrix.module }} == "domains" ]] && [[ ${{ inputs.environment }} != "prod01" ]]; then
+          if [[ ${{ inputs.component }} == "domains" ]] && [[ ${{ inputs.environment }} != "prod01" ]]; then
             echo "Not deploying domains component to dev environment"
             exit 1
           fi
@@ -56,6 +56,7 @@ jobs:
     name: Run Terraform
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
+    needs: [initCheck]
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
