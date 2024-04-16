@@ -41,13 +41,13 @@ jobs:
     needs: [get_changed_components]
     strategy:
       matrix:
-        module: ${{ fromJSON(needs.get_changed_components.outputs.matrix) }}
+        component: ${{ fromJSON(needs.get_changed_components.outputs.matrix) }}
       max-parallel: 4
       fail-fast: false
     steps:
       - name: Check valid deployment
         run: |
-          if [[ ${{ matrix.module }} == "domains" ]]; then
+          if [[ ${{ matrix.component }} == "domains" ]]; then
             echo "Not deploying domains component to dev environment"
             exit 1
           fi
@@ -77,7 +77,7 @@ jobs:
           bin/terraform.sh --action plan \
             --project ${{ vars.PROJECT }} \
             --region ${{ vars.REGION }} \
-            --component ${{ matrix.module }} \
+            --component ${{ matrix.component }} \
             --environment ${{ vars.ENVIRONMENT }} \
             --group ${{ vars.GROUP }} \
             --build-id ${{ github.run_id }}
@@ -85,8 +85,8 @@ jobs:
       - name: Generate TF Plan View
         id: tfplan-view
         run: |
-          cd "components/${{ matrix.module }}"
-          component=${{ matrix.module }}
+          cd "components/${{ matrix.component }}"
+          component=${{ matrix.component }}
           read component_name <<< "${component##*/}"
           if [ -f "build/${component_name}_${{ github.run_id }}.tfplan" ]; then
             echo "Getting plan for ${component_name}_${{ github.run_id }}.tfplan"
