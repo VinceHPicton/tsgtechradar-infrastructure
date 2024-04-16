@@ -2,6 +2,17 @@ data "aws_vpc" "selected" {
   id = var.vpc_id
 }
 
+data "aws_subnets" "public" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+
+  tags = {
+    Type = "public"
+  }
+}
+
 data "aws_subnets" "private" {
   filter {
     name   = "vpc-id"
@@ -20,7 +31,7 @@ data "aws_subnets" "nat" {
   }
 
   tags = {
-    Name = "${var.project}-${var.environment}-core-nat*"
+    Name = "${var.project}-*-core-nat*"
   }
 }
 

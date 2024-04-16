@@ -37,7 +37,7 @@ jobs:
   terraform_plan:
     name: Terraform plan
     runs-on: ubuntu-22.04
-    environment: acedev # use this as a default
+    environment: dev01 # use this as a default
     needs: [get_changed_components]
     strategy:
       matrix:

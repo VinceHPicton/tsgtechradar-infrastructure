@@ -17,3 +17,8 @@ output "nat_subnets" {
   description = "NAT Subnets"
   value       = data.aws_subnets.nat.ids
 }
+
+output "database_hostname" {
+  description = "Endpoint of the DBs"
+  value       = module.database.db_instance_address
+}

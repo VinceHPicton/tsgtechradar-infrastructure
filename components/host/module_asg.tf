@@ -1,14 +1,13 @@
 module "asg_host" {
-  for_each = var.hosts
-  source   = "terraform-aws-modules/autoscaling/aws"
-  version  = "7.3.1"
+  source  = "terraform-aws-modules/autoscaling/aws"
+  version = "7.3.1"
 
   # Autoscaling group
-  name = "${local.csi}-${each.value.name}"
+  name = local.csi
 
-  min_size                  = each.value.asg_min_size
-  max_size                  = each.value.asg_max_size
-  desired_capacity          = each.value.asg_min_size
+  min_size                  = var.asg_config.asg_min_size
+  max_size                  = var.asg_config.asg_max_size
+  desired_capacity          = var.asg_config.asg_min_size
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = data.aws_subnets.nat.ids
@@ -28,14 +27,14 @@ module "asg_host" {
 
   # Launch template
   launch_template_name        = local.csi
-  launch_template_description = "Launch template example"
+  launch_template_description = "${local.csi}-Launch template"
   update_default_version      = true
 
   image_id          = data.aws_ami.amazon_linux_2023.id
-  instance_type     = each.value.instance_type
+  instance_type     = var.asg_config.instance_type
   key_name          = aws_key_pair.keypair.key_name
   user_data         = base64encode(data.cloudinit_config.host.rendered)
-  security_groups   = [module.sg_host[each.value.name].security_group_id]
+  security_groups   = [module.asg_sg.security_group_id]
   ebs_optimized     = true
   enable_monitoring = true
 
@@ -50,7 +49,7 @@ module "asg_host" {
 
   # Autoscaling group traffic source attachment
   create_traffic_source_attachment = true
-  traffic_source_identifier        = module.alb_host[each.value.name].target_groups["asg_host"].arn
+  traffic_source_identifier        = module.alb.target_groups["asg_host"].arn
   traffic_source_type              = "elbv2"
 
   # Autoscaling group schedule
@@ -63,7 +62,7 @@ module "asg_host" {
   tags = merge(
     local.default_tags,
     {
-      "Name" = "${local.csi}-${each.value.name}"
+      "Name" = local.csi
     },
   )
 }

@@ -3,31 +3,30 @@ resource "aws_db_subnet_group" "private" {
   subnet_ids = data.aws_subnets.private.ids
 
   tags = {
-    Name = "My DB subnet group"
+    Name = "${local.csi}-dbsubnetgroup"
   }
 }
 
-module "rds_db" {
-  for_each = var.hosts
-  source   = "terraform-aws-modules/rds/aws"
-  version  = "6.5.4"
+module "database" {
+  source  = "terraform-aws-modules/rds/aws"
+  version = "6.5.4"
 
-  identifier = "${local.csi}-${each.value.name}"
+  identifier = "${local.csi}-db"
 
   engine               = "postgres"
   engine_version       = "15"
   family               = "postgres15"
   major_engine_version = 15
 
-  instance_class    = each.value.db_instance_type
-  allocated_storage = each.value.db_allocated_storage
+  instance_class    = var.database_config.db_instance_type
+  allocated_storage = var.database_config.db_allocated_storage
 
   db_name  = "postgres"
   username = "postgres"
   port     = "5432"
 
   create_db_parameter_group = true
-  parameter_group_name      = "${local.csi}-${each.value.name}-parameter-group"
+  parameter_group_name      = "${local.csi}-parameter-group"
 
   parameters = [
     {
@@ -39,7 +38,7 @@ module "rds_db" {
   db_parameter_group_tags = merge(
     local.default_tags,
     {
-      "Name" = "${local.csi}-${each.value.name}-parameter-group"
+      "Name" = "${local.csi}-parameter-group"
     },
   )
 
@@ -55,9 +54,9 @@ module "rds_db" {
   backup_retention_period = 1
   skip_final_snapshot     = true
   deletion_protection     = false
-  snapshot_identifier     = each.value.db_snapshot_id
+  snapshot_identifier     = var.database_config.db_snapshot_id
 
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = [module.database_sg.security_group_id]
 
   # DB subnet group
   create_db_subnet_group = false
@@ -66,7 +65,7 @@ module "rds_db" {
   tags = merge(
     local.default_tags,
     {
-      "Name" = "${local.csi}-${each.value.name}"
+      "Name" = "${local.csi}-db"
     },
   )
 }
