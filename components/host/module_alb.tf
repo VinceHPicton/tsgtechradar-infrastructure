@@ -12,9 +12,19 @@ module "alb" {
   security_groups       = [module.alb_sg.security_group_id]
 
   listeners = {
-    ex_http = {
+    ex-http-https-redirect = {
       port     = 80
       protocol = "HTTP"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+    ex-https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = aws_acm_certificate.this.arn
 
       forward = {
         target_group_key = "asg_host"

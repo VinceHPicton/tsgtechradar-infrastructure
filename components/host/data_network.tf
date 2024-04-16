@@ -2,6 +2,10 @@ data "aws_vpc" "selected" {
   id = var.vpc_id
 }
 
+data "aws_route53_zone" "domain" {
+  name = var.domain_name
+}
+
 data "aws_subnets" "public" {
   filter {
     name   = "vpc-id"
