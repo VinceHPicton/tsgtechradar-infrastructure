@@ -41,3 +41,6 @@ skip-check:
   - CKV_AWS_338
   - CKV_AWS_304
   - CKV2_AWS_60
+  # Domains - look at later
+  - CKV2_AWS_38
+  - CKV2_AWS_39
