@@ -92,3 +92,7 @@ data "aws_iam_policy_document" "secrets_kms" {
     resources = ["*"]
   }
 }
+
+data "aws_kms_key" "by_alias" {
+  key_id = "aws/secretsmanager"
+}
