@@ -42,6 +42,21 @@ data "aws_iam_policy_document" "ec2_access" {
       data.aws_kms_key.by_alias.arn
     ]
   }
+  statement {
+    sid    = "Logs"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "ec2_access" {
