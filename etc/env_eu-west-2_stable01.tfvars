@@ -19,4 +19,5 @@ database_config = {
 
 jira_ssm_parameter_name = "/jira/mvp"
 
-artefact_bucket = "tsgtr-302653724645-eu-west-2-tdev-ci-tfaps-main-cp"
+artefact_bucket        = "tsgtr-302653724645-eu-west-2-tdev-ci-tfaps-main-cp"
+artefact_bucket_key_id = "d66d9a8b-66d8-4151-b63b-a7e5642c7fe3"
