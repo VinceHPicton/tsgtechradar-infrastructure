@@ -65,8 +65,7 @@ resource "aws_iam_role" "host" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
   managed_policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:aws:iam::aws:policy/AdministratorAccess" # need to change
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ]
 
   tags = merge(
