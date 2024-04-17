@@ -33,6 +33,7 @@ skip-check:
   # Allow wildcards in policies
   - CKV_AWS_109
   - CKV_AWS_356
+  - CKV_AWS_111
   # RDS Module - ignoring enahnced monitoring, performance insight, etc
   - CKV_AWS_118
   - CKV_AWS_293

@@ -39,7 +39,36 @@ data "aws_iam_policy_document" "ec2_access" {
     ]
 
     resources = [
-      data.aws_kms_key.by_alias.arn
+      data.aws_kms_key.secrets_kms.arn,
+      data.aws_kms_key.artefacts_kms.arn
+    ]
+  }
+  statement {
+    sid    = "Logs"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    sid    = "S3Artefacts"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:ListObjects"
+    ]
+
+    resources = [
+      "${data.aws_s3_bucket.artefacts.arn}/*"
     ]
   }
 }
@@ -64,10 +93,6 @@ resource "aws_iam_role" "host" {
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  ]
-
   tags = merge(
     local.default_tags,
     {
@@ -79,4 +104,9 @@ resource "aws_iam_role" "host" {
 resource "aws_iam_role_policy_attachment" "ec2_access" {
   role       = aws_iam_role.host.name
   policy_arn = aws_iam_policy.ec2_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.host.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
