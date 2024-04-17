@@ -95,3 +95,8 @@ variable "artefact_bucket" {
   type        = string
   description = "S3 Bucket Containing code artefacts"
 }
+
+variable "artefact_bucket_key_id" {
+  type        = string
+  description = "KMS Key for S3 Bucket Containing code artefacts"
+}
