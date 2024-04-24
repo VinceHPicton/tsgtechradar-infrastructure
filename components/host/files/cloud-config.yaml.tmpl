@@ -31,6 +31,7 @@ runcmd:
   - unzip -q /tmp/backend.zip -d /srv/backend
   - useradd tsgtechradar
   - usermod -aG docker tsgtechradar
+  - passwd -d tsgtechradar
   - DB_USERNAME=$(aws secretsmanager get-secret-value --secret-id "${DB_SECRET_ARN}" | jq -r '.SecretString' | jq -r '.username')
   - DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id "${DB_SECRET_ARN}" | jq -r '.SecretString' | jq -r '.password')
   - sed -i.bak "s/DB_HOST=localhost/DB_HOST='${DB_HOSTNAME}'/" /srv/backend/.env
