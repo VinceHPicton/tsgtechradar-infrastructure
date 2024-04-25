@@ -27,6 +27,20 @@ data "aws_iam_policy_document" "s3_upload" {
       data.aws_kms_key.artefacts_kms.arn
     ]
   }
+
+  statement {
+    sid    = "Austoscaling"
+    effect = "Allow"
+
+    actions = [
+      "autoscaling:DescribeAutoScalingGroups",
+      "autoscaling:StartInstanceRefresh"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "assume_role" {
