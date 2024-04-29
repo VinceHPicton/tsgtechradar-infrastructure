@@ -61,6 +61,11 @@ variable "vpc_id" {
   description = "VPC ID to deploy into"
 }
 
+variable "domain_name" {
+  type        = string
+  description = "Domain name"
+}
+
 variable "web_port" {
   type        = string
   description = "Unprivileged port for the web app"
