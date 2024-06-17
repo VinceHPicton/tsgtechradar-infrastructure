@@ -40,7 +40,6 @@ data "aws_iam_policy_document" "ec2_access" {
 
     resources = [
       data.aws_kms_key.secrets_kms.arn,
-      data.aws_kms_key.artefacts_kms.arn
     ]
   }
   statement {
@@ -56,19 +55,6 @@ data "aws_iam_policy_document" "ec2_access" {
 
     resources = [
       "*"
-    ]
-  }
-  statement {
-    sid    = "S3Artefacts"
-    effect = "Allow"
-
-    actions = [
-      "s3:GetObject",
-      "s3:ListObjects"
-    ]
-
-    resources = [
-      "${data.aws_s3_bucket.artefacts.arn}/*"
     ]
   }
 }
@@ -109,4 +95,40 @@ resource "aws_iam_role_policy_attachment" "ec2_access" {
 resource "aws_iam_role_policy_attachment" "ssm" {
   role       = aws_iam_role.host.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_policy" "secret_manager_read" {
+  name        = "${local.csi}-secrets-read"
+  description = "AWS Secrets read Permissions"
+  policy      = data.aws_iam_policy_document.secret_manager_read.json
+
+  tags = merge(
+    local.default_tags,
+    {
+      "Name" = "${local.csi}-secrets-read"
+    },
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "attach_secrets_manager_read" {
+  role       = aws_iam_role.host.name
+  policy_arn = aws_iam_policy.secret_manager_read.arn
+}
+
+data "aws_iam_policy_document" "secret_manager_read" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds"
+    ]
+
+    resources = [
+      aws_secretsmanager_secret.backend_git_commit_sha.arn,
+      aws_secretsmanager_secret.frontend_git_commit_sha.arn
+    ]
+  }
 }

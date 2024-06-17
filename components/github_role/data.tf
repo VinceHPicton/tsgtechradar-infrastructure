@@ -1,11 +1,19 @@
-data "aws_s3_bucket" "artefacts" {
-  bucket = var.artefact_bucket
-}
-
-data "aws_kms_key" "artefacts_kms" {
-  key_id = var.artefact_bucket_key_id
-}
-
 data "aws_iam_openid_connect_provider" "github" {
   arn = var.github_oidc_arn
+}
+
+data "aws_ecr_repository" "frontend" {
+  name = "tsgtechradarfrontend"
+}
+
+data "aws_ecr_repository" "backend" {
+  name = "tsgtechradarbackend"
+}
+
+data "aws_secretsmanager_secret" "backend" {
+  name = "backend_git_commit_sha"
+}
+
+data "aws_secretsmanager_secret" "frontend" {
+  name = "frontend_git_commit_sha"
 }

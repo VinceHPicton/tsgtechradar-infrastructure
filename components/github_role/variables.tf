@@ -56,16 +56,6 @@ variable "default_tags" {
 #   default     = ""
 # }
 
-variable "artefact_bucket" {
-  type        = string
-  description = "S3 Bucket Containing code artefacts"
-}
-
-variable "artefact_bucket_key_id" {
-  type        = string
-  description = "KMS Key for S3 Bucket Containing code artefacts"
-}
-
 variable "github_oidc_arn" {
   type        = string
   description = "GitHub OIDC ARN"

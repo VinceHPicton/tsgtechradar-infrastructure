@@ -22,20 +22,14 @@ data "cloudinit_config" "host" {
     content = templatefile(
       "${path.module}/files/cloud-config.yaml.tmpl",
       {
-        ARTIFACT_BUCKET         = var.artefact_bucket
         ENVIRONMENT             = var.environment
         DB_HOSTNAME             = module.database.db_instance_address
         DB_SECRET_ARN           = module.database.db_instance_master_user_secret_arn
-        JIRA_SSM_PARAMETER_NAME = var.jira_ssm_parameter_name
+        ACCOUNT_NUMBER           = var.aws_account_id
+        BACKEND_GIT_COMMIT_SHA_SECRET_ARN           = aws_secretsmanager_secret.backend_git_commit_sha.arn
+        FRONTEND_GIT_COMMIT_SHA_SECRET_ARN           = aws_secretsmanager_secret.frontend_git_commit_sha.arn
+        AWS_REGION           = var.region
       }
     )
   }
-}
-
-data "aws_s3_bucket" "artefacts" {
-  bucket = var.artefact_bucket
-}
-
-data "aws_kms_key" "artefacts_kms" {
-  key_id = var.artefact_bucket_key_id
 }

@@ -23,27 +23,12 @@ runcmd:
   - sudo systemctl start docker
   - sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
   - sudo chmod +x /usr/local/bin/docker-compose
-  - mkdir -p /srv/frontend
-  - mkdir -p /srv/backend
-  - aws s3 cp s3://${ARTIFACT_BUCKET}/${ENVIRONMENT}/frontend.zip /tmp/frontend.zip
-  - aws s3 cp s3://${ARTIFACT_BUCKET}/${ENVIRONMENT}/backend.zip /tmp/backend.zip
-  - unzip -q /tmp/frontend.zip -d /srv/frontend
-  - unzip -q /tmp/backend.zip -d /srv/backend
-  - useradd tsgtechradar
-  - usermod -aG docker tsgtechradar
-  - passwd -d tsgtechradar
   - DB_USERNAME=$(aws secretsmanager get-secret-value --secret-id "${DB_SECRET_ARN}" | jq -r '.SecretString' | jq -r '.username')
   - DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id "${DB_SECRET_ARN}" | jq -r '.SecretString' | jq -r '.password')
-  - sed -i.bak "s/DB_HOST=localhost/DB_HOST='${DB_HOSTNAME}'/" /srv/backend/.env
-  - sed -i.bak "s/DB_USER=pguser/DB_USER=$DB_USERNAME/" /srv/backend/.env
-  - sed -i.bak "s/DB_PASSWORD=pgpass/DB_PASSWORD='$DB_PASSWORD'/" /srv/backend/.env
-  - sed -i.bak 's/DB_NAME=tsgtechradar/DB_NAME=postgres/' /srv/backend/.env
-  - su - tsgtechradar -c "curl -fsSL https://get.pnpm.io/install.sh | sh -"
-  - su - tsgtechradar -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
-  - su - tsgtechradar -c "nvm install --lts"
-  - chown -R tsgtechradar:tsgtechradar /srv/frontend
-  - chown -R tsgtechradar:tsgtechradar /srv/backend
-  - su - tsgtechradar -c "cd /srv/backend/ && pnpm install && pnpm build"
-  - su - tsgtechradar -c "cd /srv/backend/ && nohup pnpm start:prod > /dev/null 2>&1 &"
-  - su - tsgtechradar -c "cd /srv/frontend/ && pnpm install"
-  - su - tsgtechradar -c "cd /srv/frontend/ && nohup pnpm production > /dev/null 2>&1 &"
+  - BACKEND_GIT_COMMIT_SHA=$(aws secretsmanager get-secret-value --secret-id "${BACKEND_GIT_COMMIT_SHA_SECRET_ARN}" | jq -r '.SecretString')
+  - FRONTEND_GIT_COMMIT_SHA=$(aws secretsmanager get-secret-value --secret-id "${FRONTEND_GIT_COMMIT_SHA_SECRET_ARN}" | jq -r '.SecretString')
+  - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com
+  - docker pull ${ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/tsgtechradarbackend:$BACKEND_GIT_COMMIT_SHA
+  - docker pull ${ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/tsgtechradarfrontend:$FRONTEND_GIT_COMMIT_SHA
+  - docker run -d --network="host" -e DB_NAME=postgres -e DB_HOST=${DB_HOSTNAME} -e DB_PASSWORD=$DB_PASSWORD -e DB_USER=$DB_USERNAME ${ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/tsgtechradarbackend:$BACKEND_GIT_COMMIT_SHA
+  - docker run -d --network="host" ${ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/tsgtechradarfrontend:$FRONTEND_GIT_COMMIT_SHA
