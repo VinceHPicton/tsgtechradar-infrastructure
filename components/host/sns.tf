@@ -5,7 +5,7 @@ resource "aws_sns_topic" "healthyhosts" {
 resource "aws_sns_topic_policy" "healthyhosts" {
   arn = aws_sns_topic.healthyhosts.arn
 
-  policy = data.aws_iam_policy_document.sns_topic_policy.json
+  policy = data.aws_iam_policy_document.healthyhosts.json
 }
 
 data "aws_iam_policy_document" "healthyhosts" {
