@@ -19,7 +19,7 @@ resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
 
 resource "aws_cloudwatch_metric_alarm" "cpuutilization" {
   alarm_name          = "CPU Average is High"
-  comparison_operator = "GreaterThan"
+  comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
@@ -37,7 +37,7 @@ resource "aws_cloudwatch_metric_alarm" "cpuutilization" {
 
 resource "aws_cloudwatch_metric_alarm" "highresponsetime" {
   alarm_name          = "Tech Radar high response time"
-  comparison_operator = "GreaterThan"
+  comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "TargetResponseTime"
   namespace           = "AWS/ApplicationELB"
