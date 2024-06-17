@@ -25,7 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "cpuutilization" {
   namespace           = "AWS/EC2"
   period              = 300
   statistic           = "Average"
-  threshold           = 1
+  threshold           = 90
   alarm_description   = "High CPU usage by TSG Tech Radar App Instance"
   actions_enabled     = "true"
   alarm_actions       = [aws_sns_topic.cpuutilization.arn]
