@@ -100,7 +100,7 @@ data "aws_iam_policy_document" "cpuutilization" {
 }
 
 resource "aws_sns_topic" "highresponsetime" {
-  name = "Tech Radar High Response Time"
+  name = "Tech_Radar_High_Response_Time"
 }
 
 resource "aws_sns_topic_policy" "highresponsetime" {
