@@ -12,7 +12,7 @@ resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
   alarm_actions       = [aws_sns_topic.healthyhosts.arn]
   ok_actions          = [aws_sns_topic.healthyhosts.arn]
   dimensions = {
-    TargetGroup  = module.alb.target_groups[arn]
+    TargetGroup  = module.alb.target_groups.arn
     LoadBalancer = module.alb.arn_suffix
   }
 }
