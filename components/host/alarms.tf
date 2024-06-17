@@ -17,7 +17,7 @@ resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
+resource "aws_cloudwatch_metric_alarm" "cpuutilization" {
   alarm_name          = "CPU Average is High"
   comparison_operator = "GreaterThan"
   evaluation_periods  = 1
