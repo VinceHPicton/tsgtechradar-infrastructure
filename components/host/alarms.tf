@@ -3,7 +3,7 @@ resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "HealthyHostCount"
-  namespace           = "AWS/NetworkELB"
+  namespace           = "AWS/ApplicationELB"
   period              = 120
   statistic           = "Average"
   threshold           = 1
@@ -14,5 +14,43 @@ resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
   dimensions = {
     TargetGroup  = module.alb.target_groups.asg_host.arn_suffix
     LoadBalancer = module.alb.arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
+  alarm_name          = "CPU Average is High"
+  comparison_operator = "GreaterThan"
+  evaluation_periods  = 1
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 1
+  alarm_description   = "High CPU usage by TSG Tech Radar App Instance"
+  actions_enabled     = "true"
+  alarm_actions       = [aws_sns_topic.cpuutilization.arn]
+  ok_actions          = [aws_sns_topic.cpuutilization.arn]
+  dimensions = {
+    AutoScalingGroupName = module.asg_host.autoscaling_group_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "highresponsetime" {
+  alarm_name          = "Tech Radar high response time"
+  comparison_operator = "GreaterThan"
+  evaluation_periods  = 1
+  metric_name         = "TargetResponseTime"
+  namespace           = "AWS/ApplicationELB"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 3
+  alarm_description   = "Response time for Tech Radar app is high"
+  actions_enabled     = "true"
+  alarm_actions       = [aws_sns_topic.highresponsetime.arn]
+  ok_actions          = [aws_sns_topic.highresponsetime.arn]
+  dimensions = {
+    TargetGroup  = module.alb.target_groups.asg_host.arn_suffix
+    LoadBalancer = module.alb.arn_suffix
+
   }
 }
