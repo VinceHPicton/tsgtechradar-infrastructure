@@ -1,5 +1,6 @@
 resource "aws_sns_topic" "healthyhosts" {
-  name = "healthy_hosts_below_threshold"
+  name = "${var.project}_Healthy_Hosts_Below_Threshold"
+  kms_master_key_id = "alias/aws/sns"
 }
 
 resource "aws_sns_topic_policy" "healthyhosts" {
@@ -50,7 +51,8 @@ data "aws_iam_policy_document" "healthyhosts" {
 
 
 resource "aws_sns_topic" "cpuutilization" {
-  name = "high_cpu_utilization"
+  name = "${var.project}_High_Cpu_Utilization"
+  kms_master_key_id = "alias/aws/sns"
 }
 
 resource "aws_sns_topic_policy" "cpuutilization" {
@@ -100,7 +102,8 @@ data "aws_iam_policy_document" "cpuutilization" {
 }
 
 resource "aws_sns_topic" "highresponsetime" {
-  name = "Tech_Radar_High_Response_Time"
+  name = "${var.project}_High_Response_Time"
+  kms_master_key_id = "alias/aws/sns"
 }
 
 resource "aws_sns_topic_policy" "highresponsetime" {

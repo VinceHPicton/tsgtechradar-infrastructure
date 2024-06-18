@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
-  alarm_name          = "Unhealthy Hosts"
+  alarm_name          = "${var.project}_Unhealthy_Hosts"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "HealthyHostCount"
@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "healthyhosts" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpuutilization" {
-  alarm_name          = "CPU Average is High"
+  alarm_name          = "${var.project}_CPU_Average_is_High"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
@@ -36,7 +36,7 @@ resource "aws_cloudwatch_metric_alarm" "cpuutilization" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "highresponsetime" {
-  alarm_name          = "Tech Radar high response time"
+  alarm_name          = "${var.project}_High_Response_Time"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "TargetResponseTime"
