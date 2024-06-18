@@ -17,6 +17,5 @@ database_config = {
   db_snapshot_id       = "tsgtr-dev01-database-init"
 }
 
-jira_ssm_parameter_name = "/jira/mvp"
 
 github_oidc_arn        = "arn:aws:iam::302653724645:oidc-provider/token.actions.githubusercontent.com"

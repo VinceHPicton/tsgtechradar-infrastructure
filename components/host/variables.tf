@@ -72,12 +72,6 @@ variable "web_port" {
   default     = "8080"
 }
 
-variable "jira_ssm_parameter_name" {
-  type        = string
-  description = "Name of the SSM parameter which stores the Jira API key used by the MVP"
-  default     = ""
-}
-
 variable "asg_config" {
   type = object({
     instance_type = string

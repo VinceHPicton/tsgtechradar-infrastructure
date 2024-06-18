@@ -11,6 +11,7 @@ module "asg_host" {
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = data.aws_subnets.nat.ids
+  default_instance_warmup   = 90
 
   initial_lifecycle_hooks = []
 
