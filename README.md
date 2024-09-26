@@ -2,6 +2,11 @@
 
 Terraform Components for TSG Tech Radar
 
+## AWS account IDs where the app is hosted
+See: group_prod.tfvars:
+aws_account_id     = "836546930053" => production
+dev_aws_account_id = "302653724645" => dev
+
 ## Install pre-commit hooks
 
 ```sh
