@@ -71,7 +71,7 @@ jobs:
           terraform_version: 1.7.4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::${{ vars.ACCOUNT_ID }}:role/DeploymentExecution
