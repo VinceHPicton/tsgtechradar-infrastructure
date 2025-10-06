@@ -36,7 +36,7 @@ jobs:
           key: tflint-${{ hashFiles('.tflint.hcl') }}
 
       - name: Setup TFlint
-        uses: terraform-linters/setup-tflint@v4
+        uses: terraform-linters/setup-tflint@v6
         with:
           tflint_version: ${{ env.tflint_version }}
 
